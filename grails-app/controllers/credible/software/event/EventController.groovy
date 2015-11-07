@@ -1,8 +1,11 @@
 package credible.software.event
 
+import javax.annotation.security.RolesAllowed
+
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
+@RolesAllowed(["ROLE_ADMIN"])
 @Transactional(readOnly = true)
 class EventController {
 

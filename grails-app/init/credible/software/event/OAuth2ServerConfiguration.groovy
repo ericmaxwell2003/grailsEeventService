@@ -23,7 +23,7 @@ import javax.sql.DataSource;
 
 @Configuration
 class OAuth2ServerConfiguration {
-    static final String RESOURCE_ID = 'demo'
+    static final String RESOURCE_ID = 'event-api'
 
     @Configuration
     @EnableResourceServer

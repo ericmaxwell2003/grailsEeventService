@@ -141,7 +141,7 @@ databaseChangeLog = {
     changeSet(author: "emaxwell", id: "changelog-security-16") {
         insert(tableName: 'oauth_client_details') {
             column(name: "client_id", value: "08240b4d-09f9-44fb-88f5-3d6821fe2923") // can be anything you want
-            column(name: "resource_ids", value: "demo")
+            column(name: "resource_ids", value: "event-api")
             column(name: "client_secret", value: "6f231105-fad4-4aa4-9581-18d5f48ec810") // can be anything you want
             column(name: "scope", value: "read,write")
             column(name: "authorized_grant_types", value: "password,refresh_token,client_credentials")
