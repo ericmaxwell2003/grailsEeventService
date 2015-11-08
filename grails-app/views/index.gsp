@@ -16,7 +16,7 @@
         </style>
     </head>
     <body>
-        <h1>Demo API</h1>
-        <p>This is a demo project using Grails 3 and Spring Security OAuth.</p>
+        <h1>Event Service</h1>
+        <p>Find events in your area</p>
     </body>
 </html>
