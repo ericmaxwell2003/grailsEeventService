@@ -31,7 +31,7 @@ class Person {
         }
     }
 
-    protected void encodePassword() {
+    void encodePassword() {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder()
         password = passwordEncoder.encode(password)
     }
