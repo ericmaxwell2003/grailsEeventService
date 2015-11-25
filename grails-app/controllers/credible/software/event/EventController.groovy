@@ -27,7 +27,7 @@ class EventController {
             events = Event.list(sort: "dateCreated", order: 'desc')
         }
 
-        String newSyncToken = newSyncTokenForResults(events)
+        String newSyncToken = newSyncTokenForResults(events, params.syncToken)
         Map json = [
             syncToken: newSyncToken,
             events: events
@@ -91,9 +91,9 @@ class EventController {
         return afterDate
     }
 
-    private String newSyncTokenForResults(List<Event> eventResults) {
+    private String newSyncTokenForResults(List<Event> eventResults, String oldSyncToken) {
         if(eventResults?.size() == 0) {
-            return null
+            return oldSyncToken
         } else {
             int tokenVersion = CURRENT_TOKEN_VERSION
             long dateCreated = eventResults.get(0).dateCreated.getTime()
