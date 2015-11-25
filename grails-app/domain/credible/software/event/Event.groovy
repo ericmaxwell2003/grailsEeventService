@@ -8,6 +8,7 @@ class Event {
     String details;
     String thumbnailImgUrl;
     String detailImgUrl;
+    Date dateCreated;
 
     static constraints = {
         guid blank: false, unique: true
