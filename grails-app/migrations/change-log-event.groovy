@@ -19,12 +19,6 @@ databaseChangeLog = {
             column(name: "details", type: "VARCHAR(255)") {
                 constraints(nullable: "false")
             }
-            column(name: "thumbnail_img_url", type: "VARCHAR(255)") {
-                constraints(nullable: "true")
-            }
-            column(name: "detail_img_url", type: "VARCHAR(255)") {
-                constraints(nullable: "true")
-            }
             column(name: "date_created", type: "DATETIME") {
                 constraints(nullable: "false")
             }

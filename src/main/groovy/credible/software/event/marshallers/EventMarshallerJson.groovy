@@ -11,8 +11,8 @@ class EventMarshallerJson extends ClosureObjectMarshaller<Event> {
             json.url = event.url
             json.summary = event.summary
             json.details = event.details
-            json.thumbnailImgUrl = event.thumbnailImgUrl
-            json.detailImgUrl = event.detailImgUrl
+            json.eventDate = event.dateCreated
+            // just using the dateCreated for simplicity. In a real example, there would be a separate date for when the event will take place.
             json
         }
 

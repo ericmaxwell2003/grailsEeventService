@@ -6,8 +6,6 @@ class Event {
     String url;
     String summary;
     String details;
-    String thumbnailImgUrl;
-    String detailImgUrl;
     Date dateCreated;
 
     static constraints = {
@@ -15,7 +13,5 @@ class Event {
         url nullable: true
         summary blank: false
         details blank: false
-        thumbnailImgUrl nullable: true
-        detailImgUrl nullable: true
     }
 }

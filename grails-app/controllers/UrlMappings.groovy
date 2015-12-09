@@ -12,10 +12,6 @@ class UrlMappings {
             format = 'json'
         }
 
-        '/profile'(controller: 'profile') {
-            action = [GET: 'index']
-        }
-
         '/event'(resources: 'event', includes:['index', 'show', 'save']) {
             format = 'json'
         }
