@@ -12,8 +12,8 @@ class RegisterSpec extends Specification {
     String baseUrl
     RestBuilder rest
     String accessToken
-    String clientId = '08240b4d-09f9-44fb-88f5-3d6821fe2923';
-    String clientSecret = '6f231105-fad4-4aa4-9581-18d5f48ec810';
+    String clientId = 'event-resource-app-client-id';
+    String clientSecret = 'event-resource-app-super-secret-client-secret';
 
     def setup() {
         baseUrl = Holders.grailsApplication.config.grails.serverURL
