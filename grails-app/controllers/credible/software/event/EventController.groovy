@@ -5,7 +5,7 @@ import grails.transaction.Transactional
 
 import javax.annotation.security.RolesAllowed
 
-import static org.springframework.http.HttpStatus.*
+import static org.springframework.http.HttpStatus.CREATED
 
 
 @RolesAllowed(["ROLE_CLIENT"])
@@ -15,10 +15,9 @@ class EventController {
     public static final int CURRENT_TOKEN_VERSION = 1;
 
     def index() {
-        params.max = 10
         List<Event> events = []
-
         Date eventsAfterDate = parseEncodedTokenToGetAfterDate(params.syncToken)
+
         if(eventsAfterDate) {
             events = Event.findAll(sort:"dateCreated", order: 'desc') {
                 dateCreated > eventsAfterDate
@@ -74,15 +73,17 @@ class EventController {
         Date afterDate = null
 
         try {
-            String decodedToken = new String(encodedToken.decodeBase64())
-            int version = decodedToken.split(/:/)[0] as int
+            if(encodedToken != null) {
+                String decodedToken = new String(encodedToken.decodeBase64())
+                int version = decodedToken.split(/:/)[0] as int
 
-            // Assuming we had different versions of the token, we may process it differently.
-            // The point is that the version gives us some flexibility for future chagnes to the token
-            // format.  For now, we'll only process it if the version matches our "current" version.
-            if(version == CURRENT_TOKEN_VERSION) {
-                long dateTime = decodedToken.split(/:/)[1] as long
-                afterDate = new Date(dateTime)
+                // Assuming we had different versions of the token, we may process it differently.
+                // The point is that the version gives us some flexibility for future chagnes to the token
+                // format.  For now, we'll only process it if the version matches our "current" version.
+                if(version == CURRENT_TOKEN_VERSION) {
+                    long dateTime = decodedToken.split(/:/)[1] as long
+                    afterDate = new Date(dateTime)
+                }
             }
         } catch (Exception e) {
             e.printStackTrace()

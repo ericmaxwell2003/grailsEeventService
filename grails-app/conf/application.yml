@@ -131,8 +131,11 @@ grails:
             updateOnStart: true
 ---
 server:
-    port: 8443
-    ssl:
-        key-store: classpath:eventkeystore.jks
-        key-store-password: eventsecret
-        key-password: eventsecret
+  compression:
+      enabled: true
+      mime-types: application/json,application/xml,text/html,text/xml,text/plain
+  port: 8443
+  ssl:
+      key-store: classpath:eventkeystore.jks
+      key-store-password: eventsecret
+      key-password: eventsecret
