@@ -1,107 +1,106 @@
 package credible.software.event
 
-import static org.springframework.http.HttpStatus.*
+import grails.converters.JSON
 import grails.transaction.Transactional
 
+import javax.annotation.security.RolesAllowed
+
+import static org.springframework.http.HttpStatus.CREATED
+
+
+@RolesAllowed(["ROLE_CLIENT"])
 @Transactional(readOnly = true)
 class EventController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    public static final int CURRENT_TOKEN_VERSION = 1;
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond Event.list(params), model:[eventCount: Event.count()]
+    def index() {
+        List<Event> events = []
+        Date eventsAfterDate = parseEncodedTokenToGetAfterDate(params.syncToken)
+
+        if(eventsAfterDate) {
+            events = Event.findAll(sort:"dateCreated", order: 'desc') {
+                dateCreated > eventsAfterDate
+            }
+        } else {
+            events = Event.list(sort: "dateCreated", order: 'desc')
+        }
+
+        String newSyncToken = newSyncTokenForResults(events, params.syncToken)
+        Map json = [
+            syncToken: newSyncToken,
+            events: events
+        ]
+        respond json
     }
 
-    def show(Event event) {
-        respond event
+    def show(String id) {
+        Event event = Event.findByGuid(id)
+        if(event) {
+            respond event
+        } else {
+            response.status = 404
+        }
     }
 
-    def create() {
-        respond new Event(params)
-    }
-
+    @RolesAllowed(["ROLE_ADMIN"])
     @Transactional
     def save(Event event) {
+
         if (event == null) {
             transactionStatus.setRollbackOnly()
-            notFound()
+            response.status = 400
+            def results = [errors: 'No event passed in to create.'
+            ]
+            render results as JSON
             return
         }
 
         if (event.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond event.errors, view:'create'
+            response.status = 400
+            def results = [errors: event.errors]
+            render results as JSON
             return
         }
 
         event.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'event.label', default: 'Event'), event.id])
-                redirect event
-            }
-            '*' { respond event, [status: CREATED] }
-        }
+        respond event, [status: CREATED]
     }
 
-    def edit(Event event) {
-        respond event
+    private Date parseEncodedTokenToGetAfterDate(String encodedToken) {
+
+        Date afterDate = null
+
+        try {
+            if(encodedToken != null) {
+                String decodedToken = new String(encodedToken.decodeBase64())
+                int version = decodedToken.split(/:/)[0] as int
+
+                // Assuming we had different versions of the token, we may process it differently.
+                // The point is that the version gives us some flexibility for future chagnes to the token
+                // format.  For now, we'll only process it if the version matches our "current" version.
+                if(version == CURRENT_TOKEN_VERSION) {
+                    long dateTime = decodedToken.split(/:/)[1] as long
+                    afterDate = new Date(dateTime)
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace()
+        }
+
+        return afterDate
     }
 
-    @Transactional
-    def update(Event event) {
-        if (event == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        if (event.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond event.errors, view:'edit'
-            return
-        }
-
-        event.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'event.label', default: 'Event'), event.id])
-                redirect event
-            }
-            '*'{ respond event, [status: OK] }
-        }
-    }
-
-    @Transactional
-    def delete(Event event) {
-
-        if (event == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        event.delete flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'event.label', default: 'Event'), event.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
-    }
-
-    protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'event.label', default: 'Event'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*'{ render status: NOT_FOUND }
+    private String newSyncTokenForResults(List<Event> eventResults, String oldSyncToken) {
+        if(eventResults?.size() == 0) {
+            return oldSyncToken
+        } else {
+            int tokenVersion = CURRENT_TOKEN_VERSION
+            long dateCreated = eventResults.get(0).dateCreated.getTime()
+            String plainToken = "${tokenVersion}:${dateCreated}"
+            String encodedToken = plainToken.bytes.encodeBase64().toString()
+            return encodedToken
         }
     }
 }

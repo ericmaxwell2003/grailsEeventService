@@ -7,8 +7,13 @@ class UrlMappings {
             format = 'json'
         }
 
-        '/profile'(controller: 'profile') {
-            action = [GET: 'index']
+        '/login'(controller: 'authenticate') {
+            action = [POST: 'oauthToken']
+            format = 'json'
+        }
+
+        '/events'(resources: 'event', includes:['index', 'show', 'save']) {
+            format = 'json'
         }
 
         "/"(view:"/index")

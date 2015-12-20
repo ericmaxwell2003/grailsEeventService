@@ -17,13 +17,14 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore
+import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore
 
 import javax.sql.DataSource;
 
 @Configuration
 class OAuth2ServerConfiguration {
-    static final String RESOURCE_ID = 'demo'
+    static final String RESOURCE_ID = 'event-api'
 
     @Configuration
     @EnableResourceServer
@@ -41,6 +42,7 @@ class OAuth2ServerConfiguration {
         public void configure(HttpSecurity http) throws Exception {
             http
                 .authorizeRequests()
+                    .antMatchers("/", "/register", "/login").permitAll()
                     .anyRequest().authenticated()
         }
     }
@@ -84,7 +86,7 @@ class OAuth2ServerConfiguration {
 
         @Bean
         public TokenStore tokenStore() {
-            return new JdbcTokenStore(dataSource);
+            return new InMemoryTokenStore();
         }
     }
 }

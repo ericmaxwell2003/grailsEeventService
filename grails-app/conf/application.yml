@@ -78,7 +78,7 @@ dataSource:
 environments:
     development:
         grails:
-            serverURL: http://localhost:8080
+            serverURL: https://localhost:8443
         dataSource:
             driverClassName: com.mysql.jdbc.Driver
             dialect: org.hibernate.dialect.MySQL5Dialect
@@ -88,7 +88,7 @@ environments:
             password: demo_dev
     test:
         grails:
-            serverURL: http://localhost:8080
+            serverURL: https://localhost:8443
         dataSource:
             driverClassName: com.mysql.jdbc.Driver
             dialect: org.hibernate.dialect.MySQL5Dialect
@@ -98,7 +98,7 @@ environments:
             password: demo_test
     production:
         grails:
-            serverURL: http://localhost:8080
+            serverURL: https://localhost:8443
         dataSource:
             driverClassName: com.mysql.jdbc.Driver
             dialect: org.hibernate.dialect.MySQL5Dialect
@@ -129,3 +129,13 @@ grails:
     plugin:
         databasemigration:
             updateOnStart: true
+---
+server:
+  tomcat:
+    compression: on
+    compressableMimeTypes: application/json,application/xml,text/html,text/xml,text/plain
+  port: 8443
+  ssl:
+      key-store: classpath:eventkeystore.jks
+      key-store-password: eventsecret
+      key-password: eventsecret
