@@ -19,6 +19,9 @@ databaseChangeLog = {
             column(name: "details", type: "VARCHAR(255)") {
                 constraints(nullable: "false")
             }
+            column(name: "event_date", type: "DATETIME") {
+                constraints(nullable: "false")
+            }
             column(name: "date_created", type: "DATETIME") {
                 constraints(nullable: "false")
             }

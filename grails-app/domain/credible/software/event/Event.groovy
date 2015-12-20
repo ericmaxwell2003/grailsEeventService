@@ -6,6 +6,8 @@ class Event {
     String url;
     String summary;
     String details;
+    Date eventDate;
+
     Date dateCreated;
 
     static constraints = {

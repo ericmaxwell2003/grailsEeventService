@@ -12,7 +12,7 @@ class UrlMappings {
             format = 'json'
         }
 
-        '/event'(resources: 'event', includes:['index', 'show', 'save']) {
+        '/events'(resources: 'event', includes:['index', 'show', 'save']) {
             format = 'json'
         }
 
