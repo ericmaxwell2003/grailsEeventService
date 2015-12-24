@@ -102,7 +102,7 @@ databaseChangeLog = {
             column(name: "access_token_validity", value: 43200)
             column(name: "refresh_token_validity", value: 2592000)
             column(name: "additional_information", value: "")
-            column(name: "autoapprove", value: false)
+            column(name: "autoapprove", value: true)
         }
     }
 }
