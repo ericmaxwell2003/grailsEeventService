@@ -97,7 +97,7 @@ class EventController {
             return oldSyncToken
         } else {
             int tokenVersion = CURRENT_TOKEN_VERSION
-            long dateCreated = eventResults.get(0).dateCreated.getTime()
+            long dateCreated = eventResults.get(0).dateCreated.getTime() // assumed to be ordered desc
             String plainToken = "${tokenVersion}:${dateCreated}"
             String encodedToken = plainToken.bytes.encodeBase64().toString()
             return encodedToken
