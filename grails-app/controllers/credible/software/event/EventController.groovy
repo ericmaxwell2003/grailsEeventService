@@ -23,6 +23,7 @@ class EventController {
                 dateCreated > eventsAfterDate
             }
         } else {
+            // production app would put a limit on results
             events = Event.list(sort: "dateCreated", order: 'desc')
         }
 

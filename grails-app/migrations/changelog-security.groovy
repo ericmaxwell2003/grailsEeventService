@@ -95,12 +95,12 @@ databaseChangeLog = {
             column(name: "client_id", value: "event-resource-app-client-id") // can be anything you want
             column(name: "resource_ids", value: "event-api")
             column(name: "client_secret", value: "event-resource-app-super-secret-client-secret") // can be anything you want
-            column(name: "scope", value: "read,write")
-            column(name: "authorized_grant_types", value: "password,refresh_token,client_credentials")
+            column(name: "scope", value: "")
+            column(name: "authorized_grant_types", value: "password")
             column(name: "web_server_redirect_uri", value: "")
-            column(name: "authorities", value: "ROLE_CLIENT,ROLE_GUEST")
+            column(name: "authorities", value: "")
             column(name: "access_token_validity", value: 43200)
-            column(name: "refresh_token_validity", value: 2592000)
+            column(name: "refresh_token_validity", value: 0)
             column(name: "additional_information", value: "")
             column(name: "autoapprove", value: true)
         }
